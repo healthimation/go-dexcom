@@ -60,6 +60,15 @@ func NewClient(clientID string, clientSecret string, timeout time.Duration) Clie
 	}
 }
 
+// NewSandboxClient gets a client that talks to the dexcom sandbox
+func NewSandboxClient(clientID string, clientSecret string, timeout time.Duration) Client {
+	return &dexcomClient{
+		c:            client.NewBaseClient(findDexcomSandbox, "dexcom", true, timeout),
+		clientID:     clientID,
+		clientSecret: clientSecret,
+	}
+}
+
 func (d *dexcomClient) getUser(ctx context.Context, authorizationCode, refreshToken, redirectURI string) (*UserToken, glitch.DataError) {
 	slug := "v1/oauth2/token"
 	h := http.Header{}

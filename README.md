@@ -1,6 +1,7 @@
 # go-dexcom
 A go client for the [Dexcom](https://developer.dexcom.com/getting-started) API
 
+**Note** that this is a work in progress and may not be functional.
 
 ## Usage
 
