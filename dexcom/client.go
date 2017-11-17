@@ -40,7 +40,7 @@ type Client interface {
 	GetUser(ctx context.Context, authorizationCode, redirectURI string) (*UserToken, glitch.DataError)
 	RefreshUser(ctx context.Context, refreshToken, redirectURI string) (*UserToken, glitch.DataError)
 	GetDevices(ctx context.Context, accessToken string, startDate, endDate time.Time) (*DeviceResponse, glitch.DataError)
-	GetEGVs(ctx context.Context, accessToken string) (*EGVResponse, glitch.DataError)
+	GetEGVs(ctx context.Context, accessToken string, startDate, endDate time.Time) (*EGVResponse, glitch.DataError)
 	GetEvents(ctx context.Context, accessToken string, startDate, endDate time.Time) (*EventResponse, glitch.DataError)
 	GetStatistics(ctx context.Context, accessToken string, startDate, endDate time.Time, stats map[string][]StatRequest) (*Statistics, glitch.DataError)
 }
@@ -140,12 +140,16 @@ func (d *dexcomClient) GetDevices(ctx context.Context, accessToken string, start
 	return nil, glitch.NewDataError(fmt.Errorf("Error from API: %d - %s", statusCode, ret), ErrorAPI, fmt.Sprintf("Status code was not in the 2xx range: %d", statusCode))
 }
 
-func (d *dexcomClient) GetEGVs(ctx context.Context, accessToken string) (*EGVResponse, glitch.DataError) {
+func (d *dexcomClient) GetEGVs(ctx context.Context, accessToken string, startDate, endDate time.Time) (*EGVResponse, glitch.DataError) {
 	slug := "/v1/users/self/egvs"
 	h := http.Header{}
 	h.Add("authorization", fmt.Sprintf("Bearer %s", accessToken))
 
-	statusCode, ret, err := d.c.MakeRequest(ctx, http.MethodGet, slug, nil, h, nil)
+	q := url.Values{}
+	q.Set(paramStartDate, startDate.UTC().Format(time.RFC3339))
+	q.Set(paramEndDate, endDate.UTC().Format(time.RFC3339))
+
+	statusCode, ret, err := d.c.MakeRequest(ctx, http.MethodGet, slug, q, h, nil)
 	if err != nil {
 		return nil, err
 	}
