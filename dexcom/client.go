@@ -33,6 +33,8 @@ const (
 
 	paramStartDate = "startDate"
 	paramEndDate   = "endDate"
+
+	timeformat = "2006-01-02T15:04:05"
 )
 
 // Client can make requests to the pushy api
@@ -121,8 +123,8 @@ func (d *dexcomClient) GetDevices(ctx context.Context, accessToken string, start
 	h.Add("authorization", fmt.Sprintf("Bearer %s", accessToken))
 
 	q := url.Values{}
-	q.Set(paramStartDate, startDate.UTC().Format(time.RFC3339))
-	q.Set(paramEndDate, endDate.UTC().Format(time.RFC3339))
+	q.Set(paramStartDate, startDate.UTC().Format(timeformat))
+	q.Set(paramEndDate, endDate.UTC().Format(timeformat))
 
 	statusCode, ret, err := d.c.MakeRequest(ctx, http.MethodGet, slug, q, h, nil)
 	if err != nil {
@@ -146,8 +148,8 @@ func (d *dexcomClient) GetEGVs(ctx context.Context, accessToken string, startDat
 	h.Add("authorization", fmt.Sprintf("Bearer %s", accessToken))
 
 	q := url.Values{}
-	q.Set(paramStartDate, startDate.UTC().Format(time.RFC3339))
-	q.Set(paramEndDate, endDate.UTC().Format(time.RFC3339))
+	q.Set(paramStartDate, startDate.UTC().Format(timeformat))
+	q.Set(paramEndDate, endDate.UTC().Format(timeformat))
 
 	statusCode, ret, err := d.c.MakeRequest(ctx, http.MethodGet, slug, q, h, nil)
 	if err != nil {
@@ -171,8 +173,8 @@ func (d *dexcomClient) GetEvents(ctx context.Context, accessToken string, startD
 	h.Add("authorization", fmt.Sprintf("Bearer %s", accessToken))
 
 	q := url.Values{}
-	q.Set(paramStartDate, startDate.UTC().Format(time.RFC3339))
-	q.Set(paramEndDate, endDate.UTC().Format(time.RFC3339))
+	q.Set(paramStartDate, startDate.UTC().Format(timeformat))
+	q.Set(paramEndDate, endDate.UTC().Format(timeformat))
 
 	statusCode, ret, err := d.c.MakeRequest(ctx, http.MethodGet, slug, q, h, nil)
 	if err != nil {
@@ -196,8 +198,8 @@ func (d *dexcomClient) GetStatistics(ctx context.Context, accessToken string, st
 	h.Add("authorization", fmt.Sprintf("Bearer %s", accessToken))
 
 	q := url.Values{}
-	q.Set(paramStartDate, startDate.UTC().Format(time.RFC3339))
-	q.Set(paramEndDate, endDate.UTC().Format(time.RFC3339))
+	q.Set(paramStartDate, startDate.UTC().Format(timeformat))
+	q.Set(paramEndDate, endDate.UTC().Format(timeformat))
 
 	body, err := client.ObjectToJSONReader(stats)
 	if err != nil {
